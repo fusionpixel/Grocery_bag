@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>View List</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    
+    <div class="container mt-5">
+      <!-- top -->
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-lg-6">
+            <h1>Grocery List</h1>
+            <br />
+            <a href="{% url 'add_item'%}" class="btn btn-primary">Add Item</a>
+          </div>
+          <div class="col-lg-6 float-right">
+            <div class="row">
+              <div class="col-lg-6">
+                <!-- Date Filtering-->
+                <form action="" method="GET">
+                  <!-- {{myFilter.form.date}} -->
+                  <input type="date" class="form-control" id="dateToFilter" name="dateToFilter"/>
+                  <button type="submit" class="btn btn-outline-primary">Filter</button>
+                </form>
+              </div>
+              <div class="col-lg-4">
+                <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- // top -->
+      <!-- Grocery Cards -->
+
+      <div class="row mt-4"> 
+        <!-- DYNAMIC -->
+        {% for item in items %}
+          <div class="col-lg-4">
+            <div class="card">
+              <div class="card-body">
+                <form method="POST">
+                  <h5 class="card-title">{{item.name}}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">{{item.quantity}}</h6>
+                  {% if item.status == "PENDING" %}
+                  <p class="text-info">{{item.status}}</p>
+                  {% elif item.status == "BOUGHT" %}
+                  <p class="text-success">{{item.status}}</p>
+                  {% elif item.status == "NOT AVAILABLE" %}
+                  <p class="text-danger">{{item.status}}</p>
+                  {% endif %}
+                  <a href="{% url 'update_item' item.id %}" class="btn btn-outline-info"
+                    >Update</a
+                  >
+
+                  <a href="{% url 'delete' item.id %}" class="btn btn-outline-danger"
+                    >Delete</a
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+  </body>
+</html>
